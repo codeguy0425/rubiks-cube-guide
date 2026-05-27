@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codeguy Cubing — Master the Rubik's Cube</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --blue: #4361ee;
+  --green: #06d6a0;
+  --red: #ef476f;
+  --orange: #ff8c42;
+  --yellow: #ffd166;
+  --dark: #0f0e17;
+  --ivory: #fffffe;
+  --warm-gray: #f4f1ea;
+  --text: #1a1a2e;
+  --text-light: #6b7280;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.06);
+  --shadow-md: 0 8px 32px rgba(0,0,0,.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.12);
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --max-width: 1100px;
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--ivory);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+  transition: color .2s;
+}
+a:hover { color: var(--red); }
+
+img { max-width: 100%; display: block; }
+
+/* ── Navigation ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(15,14,23,.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0 24px;
+  transition: background .3s;
+}
+
+nav.scrolled { background: rgba(15,14,23,.95); }
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.nav-logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo span { color: var(--yellow); }
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,.7);
+  font-size: .85rem;
+  font-weight: 500;
+  letter-spacing: .02em;
+  transition: color .2s;
+}
+.nav-links a:hover { color: #fff; }
+
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ── Hero ── */
+.hero {
+  min-height: 100vh;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  align-items: center;
+  width: 100%;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,.6);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-primary, .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all .3s var(--ease);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--yellow), var(--orange));
+  color: var(--dark);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255,209,102,.3);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,.14);
+  transform: translateY(-2px);
+}
+
+/* ── 3D Cube ── */
+.cube-scene {
+  perspective: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.cube {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spin 12s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotateX(-20deg) rotateY(0deg); }
+  100% { transform: rotateX(-20deg) rotateY(360deg); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border-radius: 12px;
+}
+
+.cube-face .sticker {
+  border-radius: 4px;
+  transition: transform .2s;
+}
+
+.cube-face .sticker:hover { transform: scale(1.06); }
+
+.cube-face-front {
+  background: #1a1a2e;
+  transform: translateZ(100px);
+}
+.cube-face-front .sticker { background: #fff; }
+
+.cube-face-back {
+  background: #1a1a2e;
+  transform: rotateY(180deg) translateZ(100px);
+}
+.cube-face-back .sticker { background: var(--yellow); }
+
+.cube-face-right {
+  background: #1a1a2e;
+  transform: rotateY(90deg) translateZ(100px);
+}
+.cube-face-right .sticker { background: var(--red); }
+
+.cube-face-left {
+  background: #1a1a2e;
+  transform: rotateY(-90deg) translateZ(100px);
+}
+.cube-face-left .sticker { background: var(--orange); }
+
+.cube-face-top {
+  background: #1a1a2e;
+  transform: rotateX(90deg) translateZ(100px);
+}
+.cube-face-top .sticker { background: #fff; }
+
+.cube-face-bottom {
+  background: #1a1a2e;
+  transform: rotateX(-90deg) translateZ(100px);
+}
+.cube-face-bottom .sticker { background: var(--green); }
+
+.cube-shadow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(255,255,255,.08) 0%, transparent 70%);
+  border-radius: 50%;
+  bottom: -60px;
+  animation: pulse-shadow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-shadow {
+  0%, 100% { transform: scale(1); opacity: .5; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.hero-bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* ── Section common ── */
+.section {
+  padding: 96px 24px;
+}
+
+.section-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(67,97,238,.08);
+  color: var(--blue);
+  margin-bottom: 16px;
+}
+
+.section h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  color: var(--text-light);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Facts ── */
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.fact-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+  transition: all .3s var(--ease);
+}
+
+.fact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.fact-icon {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.fact-card h3 {
+  font-family: var(--font-heading);
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.fact-card p {
+  font-size: .88rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ── Alternating background ── */
+.section-alt {
+  background: #fff;
+}
+
+.section-alt2 {
+  background: var(--warm-gray);
+}
+
+/* ── Steps / Content ── */
+.method-section {
+  margin-bottom: 60px;
+}
+
+.method-section:last-child { margin-bottom: 0; }
+
+.method-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.method-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.method-number.n1 { background: var(--blue); }
+.method-number.n2 { background: var(--green); }
+.method-number.n3 { background: var(--red); }
+.method-number.n4 { background: var(--orange); }
+.method-number.n5 { background: var(--yellow); color: var(--dark); }
+.method-number.n6 { background: var(--dark); }
+.method-number.n7 { background: var(--blue); }
+
+.method-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.method-body {
+  padding-left: 60px;
+}
+
+.method-body p {
+  color: var(--text-light);
+  margin-bottom: 12px;
+  line-height: 1.7;
+}
+
+.method-body ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.method-body ul li {
+  position: relative;
+  padding-left: 20px;
+  font-size: .92rem;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.method-body ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .6em;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--blue);
+  opacity: .4;
+}
+
+/* ── Step Illustrations ── */
+.step-illus {
+  float: left;
+  margin-right: 24px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: #f8f9fa;
+  width: 120px;
+  height: 120px;
+  shape-outside: margin-box;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .step-illus {
+    float: none;
+    display: block;
+    margin: 0 auto 16px;
+  }
+  .method-body { padding-left: 0; }
+}
+
+.step-illus-multi {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.step-illus-multi svg {
+  border-radius: 10px;
+  background: #f8f9fa;
+  width: 80px;
+  height: 80px;
+}
+
+.algorithm {
+  display: inline-block;
+  background: rgba(15,14,23,.05);
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 8px;
+  padding: 4px 12px;
+  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-size: .85rem;
+  letter-spacing: .03em;
+}
+
+.alg-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ── Notation Guide ── */
+.notation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.notation-item {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,.04);
+  box-shadow: var(--shadow-sm);
+  transition: all .2s var(--ease);
+}
+
+.notation-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.notation-symbol {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.notation-desc {
+  font-size: .78rem;
+  color: var(--text-light);
+}
+
+.notation-symbol.face-u { color: var(--yellow); }
+.notation-symbol.face-d { color: var(--green); }
+.notation-symbol.face-r { color: var(--red); }
+.notation-symbol.face-l { color: var(--orange); }
+.notation-symbol.face-f { color: var(--blue); }
+.notation-symbol.face-b { color: var(--dark); }
+
+/* ── Intermediate cards ── */
+.intermediate-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.intermediate-card {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+  transition: all .3s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.intermediate-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.intermediate-card.card-cross::before { background: #fff; }
+.intermediate-card.card-f2l::before { background: var(--blue); }
+.intermediate-card.card-oll::before { background: var(--orange); }
+.intermediate-card.card-pll::before { background: var(--green); }
+
+.intermediate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.intermediate-card h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.intermediate-card p {
+  font-size: .88rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.intermediate-card .algo-count {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: .78rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(67,97,238,.08);
+  color: var(--blue);
+}
+
+.card-oll .algo-count {
+  background: rgba(255,140,66,.1);
+  color: var(--orange);
+}
+
+.card-pll .algo-count {
+  background: rgba(6,214,160,.1);
+  color: #059669;
+}
+
+/* ── 2-Look OLL/PLL ── */
+.look-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.look-card {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+  width: 140px;
+  flex: 0 0 auto;
+  text-align: center;
+  transition: all .3s var(--ease);
+}
+
+.look-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.look-card h4 {
+  font-family: var(--font-heading);
+  font-size: .82rem;
+  font-weight: 600;
+  margin: 6px 0 4px;
+}
+
+.look-badge {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  background: var(--warm-gray);
+  color: var(--text-light);
+  border-radius: 100px;
+  padding: 2px 10px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.look-vis svg {
+  display: block;
+  margin: 0 auto;
+  width: 54px;
+  height: 36px;
+}
+
+.oll-grid, .oll-grid-3 {
+  display: inline-grid;
+  gap: 2px;
+  padding: 4px;
+  background: #f9f5eb;
+  border-radius: 6px;
+  aspect-ratio: 1 / 1;
+}
+.oll-grid {
+  grid-template: repeat(5, 1fr) / repeat(5, 1fr);
+  width: 56px;
+}
+.oll-grid-3 {
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  width: 36px;
+}
+.oll-grid .c-n, .oll-grid-3 .c-n { background: transparent; }
+
+.oll-grid .c-y, .oll-grid-3 .c-y { background: #ffd166; border-radius: 2px; }
+
+.oll-grid .c-g, .oll-grid-3 .c-g { background: #d1d5db; border-radius: 2px; }
+
+.look-note {
+  font-size: .68rem;
+  color: var(--text-light);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.alg-sm {
+  font-family: 'DM Sans', monospace;
+  font-size: .72rem !important;
+  letter-spacing: .02em;
+  word-break: break-all;
+}
+
+.look-card--pll {
+  border-top: 3px solid var(--blue);
+}
+
+/* ── Advanced ── */
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.advanced-item {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+}
+
+.advanced-item h4 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.advanced-item p {
+  font-size: .88rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* ── Resources ── */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.resource-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,.04);
+  transition: all .3s var(--ease);
+  color: var(--text);
+}
+
+.resource-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+}
+
+.resource-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  background: rgba(67,97,238,.08);
+}
+
+.resource-info h4 {
+  font-family: var(--font-heading);
+  font-size: .95rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.resource-info p {
+  font-size: .82rem;
+  color: var(--text-light);
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--dark);
+  padding: 48px 24px;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+  font-size: .85rem;
+}
+
+footer .footer-logo {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+footer .footer-logo span { color: var(--yellow); }
+
+footer p { line-height: 1.6; }
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all .6s var(--ease);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-content { order: 2; }
+  .cube-scene { order: 1; }
+
+  .hero p { margin: 0 auto 32px; }
+  .hero-actions { justify-content: center; }
+
+  .cube { width: 150px; height: 150px; }
+  .cube-face {
+    width: 150px;
+    height: 150px;
+    gap: 4px;
+    padding: 4px;
+  }
+  .cube-face-front { transform: translateZ(75px); }
+  .cube-face-back { transform: rotateY(180deg) translateZ(75px); }
+  .cube-face-right { transform: rotateY(90deg) translateZ(75px); }
+  .cube-face-left { transform: rotateY(-90deg) translateZ(75px); }
+  .cube-face-top { transform: rotateX(90deg) translateZ(75px); }
+  .cube-face-bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px; left: 0; right: 0;
+    background: rgba(15,14,23,.98);
+    flex-direction: column;
+    padding: 20px 24px;
+    gap: 16px;
+  }
+  .nav-links.open { display: flex; }
+  .mobile-toggle { display: block; }
+
+  .section { padding: 64px 20px; }
+  .method-body { padding-left: 0; margin-top: 12px; }
+
+  .facts-grid { grid-template-columns: 1fr 1fr; }
+  .intermediate-cards { grid-template-columns: 1fr; }
+  .advanced-grid { grid-template-columns: 1fr; }
+  .resources-grid { grid-template-columns: 1fr; }
+  .notation-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .facts-grid { grid-template-columns: 1fr; }
+  .notation-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Cube interactive ── */
+#controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+#controls button {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.1);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+#controls button:hover {
+  background: rgba(255,255,255,.16);
+  transform: scale(1.05);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ Navigation ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span>◈</span> Codeguy Cubing</div>
+    <button class="mobile-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#facts">Facts</a></li>
+      <li><a href="#notation">Notation</a></li>
+      <li><a href="#beginner">Beginner</a></li>
+      <li><a href="#intermediate">CFOP</a></li>
+      <li><a href="#twolook">2-Look</a></li>
+      <li><a href="#advanced">Advanced</a></li>
+      <li><a href="#resources">Resources</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero">
+  <div class="hero-bg-dots"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">✦ 50M+ cubers worldwide</div>
+      <h1>Master the<br><em>Rubik's Cube</em></h1>
+      <p>From your first solve to sub-20 seconds — a complete guide through every level of cubing, built for beginners who want to go all the way.</p>
+      <div class="hero-actions">
+        <a href="#beginner" class="btn-primary">Start Solving →</a>
+        <a href="#facts" class="btn-secondary">Explore Facts</a>
+      </div>
+    </div>
+    <div class="cube-scene">
+      <div class="cube" id="heroCube">
+        <div class="cube-face cube-face-front">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-face cube-face-back">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-face cube-face-right">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-face cube-face-left">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-face cube-face-top">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-face cube-face-bottom">
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+          <div class="sticker"></div><div class="sticker"></div><div class="sticker"></div>
+        </div>
+        <div class="cube-shadow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Facts ═══ -->
+<section class="section" id="facts">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Did You Know?</div>
+      <h2>Fascinating Cube Facts</h2>
+      <p class="section-subtitle">The Rubik's Cube is full of surprises — here are some of the most mind-bending ones.</p>
+    </div>
+    <div class="facts-grid">
+      <div class="fact-card reveal">
+        <span class="fact-icon">🧊</span>
+        <h3>43 Quintillion Combinations</h3>
+        <p>That's 43,252,003,274,489,856,000 — more than the number of stars in the known universe. Yet every scramble can be solved in 20 moves or fewer.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">🕰️</span>
+        <h3>Invented in 1974</h3>
+        <p>Hungarian architect Ernő Rubik created the cube as a teaching tool for spatial geometry. He called it the "Magic Cube" and spent a month solving it for the first time.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">🏆</span>
+        <h3>World Record: 3.13s</h3>
+        <p>Max Park holds the current world record for a single solve (3.13 seconds, June 2023). The record has dropped from 22.95s in 1982 to under 4s today.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">📦</span>
+        <h3>Best-Selling Toy Ever</h3>
+        <p>Over 500 million cubes have been sold worldwide — making it the best-selling puzzle toy of all time. The original 1980s craze saw 200 million sold in 3 years.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">🎯</span>
+        <h3>God's Number: 20</h3>
+        <p>Every possible Rubik's Cube scramble can be solved in 20 moves or fewer (half-turn metric). This was proven in 2010 by a team using Google's computers — 35 years after the cube's invention.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">👁️</span>
+        <h3>Blindfolded World Record</h3>
+        <p>Tommy Cherry solved a cube blindfolded in 14.51 seconds (2024). Blindfolded solvers memorize the cube, put on a blindfold, then execute the solution from memory.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">🤖</span>
+        <h3>Robots Solve in Under 1s</h3>
+        <p>The fastest robot can solve a cube in just 0.305 seconds. It uses cameras to detect the state and motors to execute the solution faster than the human eye can follow.</p>
+      </div>
+      <div class="fact-card reveal">
+        <span class="fact-icon">🌍</span>
+        <h3>World Cube Association</h3>
+        <p>The WCA governs official cubing competitions across 100+ countries with events for 17 different puzzle types — from the 2×2 to the infamous 7×7 cube.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Notation ═══ -->
+<section class="section section-alt" id="notation">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">The Language of Cubing</div>
+      <h2>Cube Notation</h2>
+      <p class="section-subtitle">Before you learn algorithms, you need to speak the language. Each letter represents a face turn.</p>
+    </div>
+    <div class="notation-grid reveal">
+      <div class="notation-item">
+        <div class="notation-symbol face-u">U</div>
+        <div class="notation-desc">Upper face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-u">U'</div>
+        <div class="notation-desc">Upper face counter-clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-d">D</div>
+        <div class="notation-desc">Down face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-d">D'</div>
+        <div class="notation-desc">Down face counter-clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-r">R</div>
+        <div class="notation-desc">Right face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-r">R'</div>
+        <div class="notation-desc">Right face counter-clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-l">L</div>
+        <div class="notation-desc">Left face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-l">L'</div>
+        <div class="notation-desc">Left face counter-clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-f">F</div>
+        <div class="notation-desc">Front face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-f">F'</div>
+        <div class="notation-desc">Front face counter-clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-b">B</div>
+        <div class="notation-desc">Back face clockwise</div>
+      </div>
+      <div class="notation-item">
+        <div class="notation-symbol face-b">B'</div>
+        <div class="notation-desc">Back face counter-clockwise</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;color:var(--text-light);font-size:.88rem;">
+      A letter alone = clockwise. <strong>'</strong> (prime) = counter-clockwise. <strong>2</strong> = double turn (e.g. R2).
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Beginner Method ═══ -->
+<section class="section" id="beginner">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Step by Step</div>
+      <h2>Beginner: Layer by Layer</h2>
+      <p class="section-subtitle">The most intuitive method for first-time solvers. We'll build the cube one layer at a time, from bottom to top.</p>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n1">1</div>
+        <h3>The White Cross</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="110" rx="12" fill="#f3f4f6"/>
+          <rect x="5" y="5" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="40" y="5" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="5" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="5" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="40" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="5" y="75" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="40" y="75" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="75" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#9ca3af" font-weight="700">WHITE CROSS</text>
+        </svg>
+        <p>Hold the cube with the white center on top. Find the four white edge pieces (pieces with white + one other color) and move them to the top layer, aligned with their matching center colors. Each edge should match both the white center and the side center.</p>
+        <ul>
+          <li>Start by finding a white edge on the bottom layer and bringing it up</li>
+          <li>Align the side color of each white edge with the matching center</li>
+          <li>Make sure the white stickers face UP, forming a daisy pattern, then align and flip</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n2">2</div>
+        <h3>White Corners</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="110" rx="12" fill="#f3f4f6"/>
+          <rect x="5" y="5" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="40" y="5" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="5" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="5" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="40" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="40" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="5" y="75" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="40" y="75" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <rect x="75" y="75" width="30" height="30" rx="4" fill="#fff" stroke="#e5e7eb" stroke-width="1.5"/>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#9ca3af" font-weight="700">FIRST LAYER</text>
+        </svg>
+        <p>Hold the cube with white on top. Insert the four corner pieces to complete the first layer. Each corner goes in the <strong>front-top-right</strong> position. Move the piece you want to insert to the <strong>front-bottom-right</strong> corner, then apply the algorithm.</p>
+        <ul>
+          <li>Find a white corner on the bottom layer</li>
+          <li>Position it at <strong>front-bottom-right</strong> &mdash; directly under where it needs to go (match the two side colors)</li>
+          <li>Apply: <span class="algorithm">R' D' R D</span> (repeat until solved)</li>
+          <li>If the white sticker is facing down, do the algorithm 4 times</li>
+          <li>If facing you, do it 2 times. If facing away, do it 3 times</li>
+          <li>If a white corner is already on top but in the wrong spot, pick any bottom corner and <span class="algorithm">R' D' R D</span> once to kick it down to the bottom layer, then re-insert it correctly</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n3">3</div>
+        <h3>Middle Layer Edges</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="110" rx="12" fill="#f3f4f6"/>
+          <rect x="5" y="5" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="40" y="5" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="75" y="5" width="30" height="30" rx="4" fill="#d1d5db"/>
+          <rect x="5" y="40" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="40" y="40" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="75" y="40" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="5" y="75" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="40" y="75" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="75" y="75" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#9ca3af" font-weight="700">FIRST 2 LAYERS</text>
+        </svg>
+        <p>Flip the cube so the solved white layer is on the bottom. Insert the four middle layer edges. Find edges on the top layer that don't have yellow.</p>
+        <ul>
+          <li>Match the front color of the edge to the corresponding center</li>
+          <li>If the edge needs to go to the <strong>right</strong>: <span class="algorithm">U R U' R' U' F' U F</span></li>
+          <li>If the edge needs to go to the <strong>left</strong>: <span class="algorithm">U' L' U L U F U' F'</span></li>
+          <li>If an edge is in the correct position but flipped, move it out using either algorithm, then re-insert it</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n4">4</div>
+        <h3>The Yellow Cross</h3>
+      </div>
+      <div class="method-body">
+        <div class="step-illus-multi">
+          <svg viewBox="0 0 90 94">
+            <rect width="90" height="90" rx="8" fill="#f3f4f6"/>
+            <rect x="4" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="62" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="33" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="33" width="24" height="24" rx="3" fill="#ffd166"/>
+            <rect x="62" y="33" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="62" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <text x="45" y="90" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#9ca3af" font-weight="600">DOT</text>
+          </svg>
+          <svg viewBox="0 0 90 94">
+            <rect width="90" height="90" rx="8" fill="#f3f4f6"/>
+            <rect x="4" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="4" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="33" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="33" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="62" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <text x="45" y="90" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#9ca3af" font-weight="600">L-SHAPE</text>
+          </svg>
+          <svg viewBox="0 0 90 94">
+            <rect width="90" height="90" rx="8" fill="#f3f4f6"/>
+            <rect x="4" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="62" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="33" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="4" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="62" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <text x="45" y="90" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#9ca3af" font-weight="600">LINE</text>
+          </svg>
+          <svg viewBox="0 0 90 94">
+            <rect width="90" height="90" rx="8" fill="#f3f4f6"/>
+            <rect x="4" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="4" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="4" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="4" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="33" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="33" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="4" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <rect x="33" y="62" width="24" height="24" rx="3" fill="#ffd166" stroke="#f5c542" stroke-width=".8"/>
+            <rect x="62" y="62" width="24" height="24" rx="3" fill="#d1d5db"/>
+            <text x="45" y="90" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#9ca3af" font-weight="600">CROSS ✓</text>
+          </svg>
+        </div>
+        <p>Hold the cube with yellow on top. Orient the top layer edges to form a yellow cross. <strong>Ignore the corners</strong> for now &mdash; only the four edge pieces matter.</p>
+        <ul>
+          <li><strong>Dot</strong> (no edges): <span class="algorithm">F R U R' U' F'</span> → will give you an "L" shape</li>
+          <li><strong>L-shape</strong> (two adjacent edges): hold the L in the <strong>back-left</strong> corner, then <span class="algorithm">F U R U' R' F'</span></li>
+          <li><strong>Line</strong> (two opposite edges): hold the line <strong>horizontally</strong>, then <span class="algorithm">F R U R' U' F'</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n5">5</div>
+        <h3>Position Yellow Corners</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="110" rx="12" fill="#f3f4f6"/>
+          <rect x="5" y="5" width="30" height="30" rx="4" fill="#06d6a0"/>
+          <rect x="40" y="5" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="5" width="30" height="30" rx="4" fill="#ef476f"/>
+          <rect x="5" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="40" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="5" y="75" width="30" height="30" rx="4" fill="#ff8c42"/>
+          <rect x="40" y="75" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="75" width="30" height="30" rx="4" fill="#4361ee"/>
+          <path d="M30 18 Q55 2 80 18" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="3 3" marker-end="url(#arrow5)"/>
+          <path d="M85 40 Q100 55 85 75" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="3 3" marker-end="url(#arrd5)"/>
+          <path d="M25 75 Q10 55 25 40" fill="none" stroke="#9ca3af" stroke-width="1.8" stroke-dasharray="3 3" marker-end="url(#arrd52)"/>
+          <defs><marker id="arrow5" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L6 3 L0 6z" fill="#9ca3af"/></marker>
+          <marker id="arrd5" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L6 3 L0 6z" fill="#9ca3af"/></marker>
+          <marker id="arrd52" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L6 3 L0 6z" fill="#9ca3af"/></marker></defs>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#9ca3af" font-weight="700">CORNER CYCLE</text>
+        </svg>
+        <p>Hold the cube with yellow on top. Now we position the four yellow corners into their correct spots (they might be rotated — that's fine). Look for two corners on the same side that match the side color.</p>
+        <ul>
+          <li>If you have <strong>two matching corners on the same face</strong>, hold that face to the back and do: <span class="algorithm">U R U' L' U R' U' L</span></li>
+          <li>If <strong>no corners match,</strong> do the algorithm from any angle once, then re-evaluate</li>
+          <li>After this step, all four corners should be in the correct position</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n6">6</div>
+        <h3>Orient Yellow Corners</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="110" rx="12" fill="#f3f4f6"/>
+          <rect x="5" y="5" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="40" y="5" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="5" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="5" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="40" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="40" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="5" y="75" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="40" y="75" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <rect x="75" y="75" width="30" height="30" rx="4" fill="#ffd166" stroke="#f5c542" stroke-width="1.5"/>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7.5" fill="#9ca3af" font-weight="700">YELLOW FACE ✓</text>
+        </svg>
+        <p>Hold the cube with yellow on top. Rotate the yellow corners so yellow faces up. Hold one unsolved corner in the <strong>front-right-top</strong> position.</p>
+        <ul>
+          <li>Apply: <span class="algorithm">R' D' R D</span> (yes, the same algorithm from step 2)</li>
+          <li>Repeat until that corner's yellow sticker faces up (2 or 4 times)</li>
+          <li><strong>Important:</strong> Don't re-grip the cube — just rotate the top layer (U turn) to bring the next unsolved corner into position</li>
+          <li>The bottom layers will get scrambled temporarily — keep going, they'll be restored!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method-section reveal">
+      <div class="method-header">
+        <div class="method-number n7">7</div>
+        <h3>Permute Yellow Edges</h3>
+      </div>
+      <div class="method-body">
+        <svg viewBox="0 0 110 118" class="step-illus">
+          <rect width="110" height="118" rx="12" fill="#f3f4f6"/>
+          <rect x="41" y="5" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="52" y="5" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="63" y="5" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="41" y="16" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="52" y="16" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="63" y="16" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="41" y="27" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="52" y="27" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="63" y="27" width="9" height="9" rx="2" fill="#fff" stroke="#e5e7eb" stroke-width=".6"/>
+          <rect x="5" y="40" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="16" y="40" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="27" y="40" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="5" y="51" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="16" y="51" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="27" y="51" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="5" y="62" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="16" y="62" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="27" y="62" width="9" height="9" rx="2" fill="#06d6a0"/>
+          <rect x="40" y="40" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="51" y="40" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="62" y="40" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="40" y="51" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="51" y="51" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="62" y="51" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="40" y="62" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="51" y="62" width="9" height="9" rx="2" fill="#ef476f"/>
+          <rect x="62" y="62" width="9" height="9" rx="2" fill="#ef476f"/>
+          <text x="55" y="112" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="#06d6a0" font-weight="700">SOLVED ✦</text>
+        </svg>
+        <p>Hold the cube with yellow on top. Position the yellow edges to complete the cube. Look at the side colors of the top layer.</p>
+        <ul>
+          <li>If <strong>one face is fully solved</strong>, hold it to the back and do: <span class="algorithm">F2 U L R' F2 L' R U F2</span></li>
+          <li>If <strong>no face is fully solved</strong>, do the algorithm from any position, then re-evaluate</li>
+          <li>You may need to do this algorithm twice</li>
+          <li><strong>Congratulations!</strong> You've solved your first Rubik's Cube! 🎉</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Intermediate ═══ -->
+<section class="section section-alt2" id="intermediate">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Level Up</div>
+      <h2>Intermediate: CFOP Method</h2>
+      <p class="section-subtitle">Once you're comfortable with the beginner method, CFOP (pronounced "C-F-O-P" or "see-fop") is the next step to faster solving. It's the most popular speedcubing method used by world record holders.</p>
+    </div>
+    <div class="intermediate-cards">
+      <div class="intermediate-card card-cross reveal">
+        <h4>Cross</h4>
+        <p>Instead of building the white cross on top and flipping it down, build it directly on the <strong>bottom</strong>. This saves 2 moves and lets you see your first F2L pair during inspection.</p>
+        <div class="algo-count">Target: ≤ 8 moves</div>
+      </div>
+      <div class="intermediate-card card-f2l reveal">
+        <h4>F2L — First Two Layers</h4>
+        <p>Solve the white corner and middle layer edge simultaneously in one step. Instead of 3 separate steps in the beginner method, you insert corner-edge pairs together. 41 basic cases, but most are intuitive.</p>
+        <div class="algo-count">41 cases (mostly intuitive)</div>
+      </div>
+      <div class="intermediate-card card-oll reveal">
+        <h4>OLL — Orient Last Layer</h4>
+        <p>Make the entire top face yellow in one algorithm. The beginner method uses 2 steps (cross + corners); full OLL does it in one. Start with "2-look OLL" (10 algorithms) before learning all 57.</p>
+        <div class="algo-count">57 algorithms</div>
+      </div>
+      <div class="intermediate-card card-pll reveal">
+        <h4>PLL — Permute Last Layer</h4>
+        <p>Swap the top pieces into their correct positions to solve the cube. Like OLL, start with "2-look PLL" (6 algorithms) first. Full PLL gives you 21 algorithms for the fastest finishes.</p>
+        <div class="algo-count">21 algorithms</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:32px;font-size:.9rem;color:var(--text-light);" class="reveal">
+      <strong>💡 Tip:</strong> Start with <strong>2-look OLL</strong> (10 algs) + <strong>2-look PLL</strong> (6 algs) = only <strong>16 algorithms</strong> to reach sub-45 second solves.
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 2-Look OLL/PLL ═══ -->
+<section class="section section-alt2" id="twolook">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Bridge to Speed</div>
+      <h2>2-Look OLL &amp; 2-Look PLL</h2>
+      <p class="section-subtitle">Replace the last layer beginner steps with just <strong>16 algorithms</strong> — 10 for OLL (orient) + 6 for PLL (permute). Learn these and you'll be solving in under a minute consistently.</p>
+    </div>
+
+    <h3 style="margin-bottom:20px;margin-top:8px;font-size:1.25rem;display:flex;align-items:center;gap:8px;"><span style="background:var(--yellow);color:#333;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-weight:700;font-family:var(--font-heading);font-size:.85rem;">O</span> Step 4&ndash;6: 2-Look OLL <span style="font-weight:400;font-size:.85rem;color:var(--text-light);">(orient last layer &mdash; 10 algorithms)</span></h3>
+
+    <div class="look-cards">
+      <div class="look-card reveal">
+        <div class="look-badge">Edge 1/3</div>
+        <div class="look-vis"><div class="oll-grid-3"><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div></div></div>
+        <h4>Dot</h4>
+        <span class="algorithm alg-sm">F R U R' U' F'</span>
+        <p class="look-note">Once &rarr; L-shape</p>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">Edge 2/3</div>
+        <div class="look-vis"><div class="oll-grid-3"><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div></div></div>
+        <h4>L-Shape</h4>
+        <span class="algorithm alg-sm">F U R U' R' F'</span>
+        <p class="look-note">Hold L in back-left</p>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">Edge 3/3</div>
+        <div class="look-vis"><div class="oll-grid-3"><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div></div></div>
+        <h4>Line</h4>
+        <span class="algorithm alg-sm">F R U R' U' F'</span>
+        <p class="look-note">Hold line horizontally</p>
+      </div>
+    </div>
+
+    <p style="margin:10px 0 20px;font-size:.85rem;color:var(--text-light);">These 3 edge-orientation cases are the same as Step&nbsp;4 (yellow cross). Once all 4 edges show yellow up, move to the corner cases below.</p>
+
+    <div class="look-cards">
+      <div class="look-card reveal">
+        <div class="look-badge">C 1/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div></div></div>
+        <h4>Sune</h4>
+        <span class="algorithm alg-sm">R U R' U R U2 R'</span>
+        <span class="algorithm alg-sm">R U R' U R U2 R'</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 2/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div></div></div>
+        <h4>Anti-Sune</h4>
+        <span class="algorithm alg-sm">R U2 R' U' R U' R'</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 3/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div></div></div>
+        <h4>H</h4>
+        <span class="algorithm alg-sm">R U2 R' U' R U R' U' R U' R'</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 4/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div></div></div>
+        <h4>Pi</h4>
+        <span class="algorithm alg-sm">R U2 R2 U' R2 U' R2 U2 R</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 5/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-n"></div></div></div>
+        <h4>U</h4>
+        <span class="algorithm alg-sm">R2 D R' U2 R D' R' U2 R'</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 6/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div></div></div>
+        <h4>T</h4>
+        <span class="algorithm alg-sm">r U R' U' r' F R F'</span>
+      </div>
+
+      <div class="look-card reveal">
+        <div class="look-badge">C 7/7</div>
+        <div class="look-vis"><div class="oll-grid"><div class="c-n"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-g"></div><div class="c-y"></div><div class="c-y"></div><div class="c-g"></div><div class="c-n"></div><div class="c-y"></div><div class="c-g"></div><div class="c-g"></div><div class="c-n"></div></div></div>
+        <h4>L</h4>
+        <span class="algorithm alg-sm">F R' F' r U R U' r'</span>
+      </div>
+    </div>
+
+    <h3 style="margin:36px 0 20px;font-size:1.25rem;display:flex;align-items:center;gap:8px;"><span style="background:var(--blue);color:#fff;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-weight:700;font-family:var(--font-heading);font-size:.85rem;">P</span> Step 5&ndash;7: 2-Look PLL <span style="font-weight:400;font-size:.85rem;color:var(--text-light);">(permute last layer &mdash; 6 algorithms)</span></h3>
+
+    <p style="margin-bottom:16px;font-size:.85rem;color:var(--text-light);">After OLL, the top face is all yellow. Now permute the pieces to solve the cube. First position corners, then edges.</p>
+
+    <div class="look-cards">
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Crn 1/2</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#06d6a0"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#06d6a0"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#06d6a0"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#06d6a0"/></svg>
+        </div>
+        <h4>Aa Perm</h4>
+        <span class="algorithm alg-sm">x R' U R' D2 R U' R' D2 R2</span>
+        <p class="look-note">Solved corner at front-left</p>
+      </div>
+
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Crn 2/2</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#ef476f"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#ef476f"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#ef476f"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#ef476f"/></svg>
+        </div>
+        <h4>Ab Perm</h4>
+        <span class="algorithm alg-sm">x R2 D2 R U R' D2 R U' R</span>
+        <p class="look-note">Solved corner at front-right</p>
+      </div>
+    </div>
+
+    <div class="look-cards">
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Edg 1/4</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#d1d5db"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/></svg>
+        </div>
+        <h4>Ua Perm</h4>
+        <span class="algorithm alg-sm">R U' R U R U R U' R' U' R2</span>
+        <p class="look-note">Solved edge at back (CW)</p>
+      </div>
+
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Edg 2/4</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#d1d5db"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/></svg>
+        </div>
+        <h4>Ub Perm</h4>
+        <span class="algorithm alg-sm">R2 U R U R' U' R' U' R' U R'</span>
+        <p class="look-note">Solved edge at back (CCW)</p>
+      </div>
+
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Edg 3/4</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#d1d5db"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/></svg>
+        </div>
+        <h4>H Perm</h4>
+        <span class="algorithm alg-sm">M2 U M2 U2 M2 U M2</span>
+        <p class="look-note">Opposite edges swap</p>
+      </div>
+
+      <div class="look-card look-card--pll reveal">
+        <div class="look-badge">Edg 4/4</div>
+        <div class="look-vis">
+          <svg viewBox="0 0 54 36"><rect width="54" height="36" rx="6" fill="#f9f5eb"/><rect x="3" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="3" width="8" height="8" rx="2" fill="#d1d5db"/><rect x="27" y="3" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="3" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="15" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="14" width="8" height="8" rx="2" fill="#ffd166"/><rect x="3" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/><rect x="15" y="25" width="8" height="8" rx="2" fill="#ffd166"/><rect x="27" y="25" width="8" height="8" rx="2" fill="#fff" stroke="#d1d5db" stroke-width=".5"/></svg>
+        </div>
+        <h4>Z Perm</h4>
+        <span class="algorithm alg-sm">M2 U M2 U M' U2 M2 U2 M'</span>
+        <p class="look-note">Adjacent edges swap</p>
+      </div>
+    </div>
+
+    <div style="background:var(--ivory);border-radius:var(--radius-md);padding:20px 24px;margin-top:32px;box-shadow:var(--shadow-sm);" class="reveal">
+      <p style="font-size:.9rem;color:var(--text);"><strong>📋 Learning Path:</strong> Master the 3 edge cases + <strong>Sune</strong> + <strong>Anti-Sune</strong> first (that's 5 algs to finish OLL). Then add <strong>Ua</strong> + <strong>Ub</strong> (7 algs total and you can solve in ~50s). Add the remaining 9 algorithms over time &mdash; one new alg per day is plenty.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ Advanced ═══ -->
+<section class="section" id="advanced">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Going Pro</div>
+      <h2>Advanced Techniques</h2>
+      <p class="section-subtitle">Once you're comfortable with CFOP, these techniques will push you past the plateau toward sub-15 and beyond.</p>
+    </div>
+    <div class="advanced-grid">
+      <div class="advanced-item reveal">
+        <h4>⌛ Look Ahead</h4>
+        <p>The most important skill for speed. During your current pair insertion, already be tracking where the next pair is — never pause between pairs. Practice slow-solving to develop this.</p>
+      </div>
+      <div class="advanced-item reveal">
+        <h4>🖐️ Finger Tricks</h4>
+        <p>Optimize how you push each face. Use index fingers for U and U' (push, not pull), wrist turns for F/F', and double-flick for U2. Efficient finger tricks save 0.3–0.5s per algorithm.</p>
+      </div>
+      <div class="advanced-item reveal">
+        <h4>⚡ Advanced F2L</h4>
+        <p>Learn to insert pairs from any angle, use empty slots, use sledgehammer (<span class="algorithm">R' F R F'</span>), and solve pairs when they're already connected but misoriented.</p>
+      </div>
+      <div class="advanced-item reveal">
+        <h4>🧩 X-Cross</h4>
+        <p>Build the cross plus one F2L pair during inspection. This skips a full insertion step and gives you a massive advantage. Start by planning the cross in inspection, then look for the easiest pair.</p>
+      </div>
+      <div class="advanced-item reveal">
+        <h4>🎨 Full OLL / PLL</h4>
+        <p>All 57 OLL and 21 PLL algorithms memorized. Learn them in small batches (5 per week) and drill each until it's muscle memory before adding more. Use <code>Anki</code> or similar for spaced repetition.</p>
+      </div>
+      <div class="advanced-item reveal">
+        <h4>🌈 Color Neutrality</h4>
+        <p>Don't always start with white — be comfortable building a cross on any color. This lets you choose the easiest scramble every time, saving 1–3 moves on cross. A long-term investment that pays off.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Resources ═══ -->
+<section class="section section-alt2" id="resources">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div class="section-tag">Continue Learning</div>
+      <h2>Curated Resources</h2>
+      <p class="section-subtitle">The best places to deepen your cubing knowledge — from video tutorials to algorithm databases.</p>
+    </div>
+    <div class="resources-grid">
+      <a href="https://www.youtube.com/@JPerm" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">▶️</div>
+        <div class="resource-info">
+          <h4>J Perm</h4>
+          <p>YouTube — The best cubing tutorials on YouTube. Clear, slow, and thorough.</p>
+        </div>
+      </a>
+      <a href="https://www.cubeskills.com/" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">🎓</div>
+        <div class="resource-info">
+          <h4>CubeSkills</h4>
+          <p>Platform — Feliks Zemdegs' official tutorial site with structured learning paths.</p>
+        </div>
+      </a>
+      <a href="https://speedcubedb.com/" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">📊</div>
+        <div class="resource-info">
+          <h4>SpeedCubeDB</h4>
+          <p>Database — Search, compare, and learn algorithms with video examples.</p>
+        </div>
+      </a>
+      <a href="https://www.worldcubeassociation.org/" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">🏛️</div>
+        <div class="resource-info">
+          <h4>World Cube Association</h4>
+          <p>Official — Competition results, rankings, and event information.</p>
+        </div>
+      </a>
+      <a href="https://www.speedsolving.com/" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">💬</div>
+        <div class="resource-info">
+          <h4>Speedsolving Forums</h4>
+          <p>Community — The largest cubing forum. Discussions, guides, and algorithm sharing.</p>
+        </div>
+      </a>
+      <a href="https://ruwix.com/" target="_blank" rel="noopener" class="resource-card reveal">
+        <div class="resource-icon">🧩</div>
+        <div class="resource-info">
+          <h4>Ruwix</h4>
+          <p>Reference — Comprehensive wiki with algorithms, notation, and puzzle guides.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer>
+  <div class="footer-logo"><span>◈</span> Codeguy Cubing</div>
+  <p>Built with curiosity. Cubing is a journey — enjoy every solve.</p>
+  <p style="margin-top:8px;font-size:.78rem;">© 2026 Codeguy Cubing</p>
+</footer>
+
+<script>
+(function() {
+// ── Mobile menu ──
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+// ── Nav scroll effect ──
+const nav = document.getElementById('nav');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 60);
+  lastScroll = y;
+}, { passive: true });
+
+// ── Scroll reveal ──
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ── Cube rotation on scroll ──
+const cube = document.getElementById('heroCube');
+let cubeAngle = 0;
+window.addEventListener('scroll', () => {
+  const scrollFraction = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+  cubeAngle = scrollFraction * 180;
+  cube.style.animation = 'none';
+  cube.style.transform = `rotateX(${-20 + cubeAngle * 0.15}deg) rotateY(${cubeAngle}deg)`;
+}, { passive: true });
+
+// Reset rotation animation when at top
+window.addEventListener('scroll', () => {
+  if (window.scrollY < 10) {
+    cube.style.animation = '';
+    cube.style.transform = '';
+  }
+}, { passive: true });
+
+})();
+</script>
+
+</body>
+</html>
